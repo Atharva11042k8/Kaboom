@@ -1,8 +1,198 @@
-body {
+/* Basic Reset & Body */
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #ffffff;
+    /* Hide scrollbar but allow scrolling */
+    overflow-x: hidden;
+    overflow-y: scroll; /* Or 'auto' if you prefer */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    background-color: #000000; /* Black background */
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Canvas Styling */
+#bg {
+    position: fixed; /* Stick to the background */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Place it behind the content */
+    display: block; /* Remove potential extra space */
+}
+
+/* Content Overlay Styling */
+.content-overlay {
+    position: relative; /* Needed for z-index stacking if required */
+    z-index: 1; /* Ensure content is above canvas */
+    width: 100%;
+    /* We control content visibility via JS, not direct scrolling */
+}
+
+.content-section {
+    min-height: 100vh; /* Each section conceptually takes viewport height */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #87CEEB;
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 700px; /* Limit text width */
+    margin: 0 auto; /* Center text block */
+
+    /* Fade-in/out control */
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    pointer-events: none; /* Initially not interactive */
+    position: fixed; /* Keep sections fixed, fade in/out */
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%; /* Take full width for centering */
 }
+
+.content-section.active {
+    opacity: 1;
+    pointer-events: auto; /* Make active section interactive */
+}
+
+/* Specific Content Styling */
+h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem); /* Responsive font size */
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+h2 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin-bottom: 1.5rem;
+    color: #eee;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+p {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    color: #ccc;
+    max-width: 550px;
+}
+
+.scroll-prompt {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #aaa;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+ul {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+a {
+    color: #00ffff; /* Cyan links */
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    font-weight: 600;
+}
+
+a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.social-links {
+    margin-top: 1.5rem;
+}
+
+.social-links a {
+    margin: 0 10px;
+    color: #aaa;
+    font-weight: 400;
+}
+.social-links a:hover {
+    color: #fff;
+     text-shadow: none;
+}
+
+
+/* Loading Screen (Optional) */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100; /* Above everything */
+    transition: opacity 0.8s ease-out;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader {
+    border: 8px solid #333; /* Light grey */
+    border-top: 8px solid #00ffff; /* Cyan */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1.5s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading-screen p {
+    color: #aaa;
+    font-size: 1rem;
+}
+
+
+/* Add subtle background noise/grain */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* Use vh to ensure full coverage */
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykGAjjKyAUhSZLldeKKTANrzAUROxPyGkgCHAmuGAJaCQZrZTjGCoGqsSqvQDfvkAea2rkKmQ6S+Xdk/pGilVBUwsWjpEzEeBFqumQsKgc/QqfMI Программисты любят كس أمك Вижн другога воде احد век قد رد хто făcut Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом ولهذا السبب هو إдак لحق مشكلة كبيرة казалось знову прийти тому що це дуже важливо Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом }eRP5clJQAzAsUCJZ9MA/Lf+xL4GGpW+X0OnKAUAUZUu1fJI+K4EEbA7DAC+1VKgE6P5LVDNJoAZCEv67hs+ApA4XAD/20ohTSTJ4D9xWQ/92zOfj+xkZCBlMAUh+hDtIuhTQTp377q9+I9Uu/vOE58HmDJIAoGgFCanBbGkgRFCKl8XJTIn01+3m5Z9Rd//jG3kMAAAAAASUVORK5CYII='); /* Subtle grain */
+    opacity: 0.05; /* Very subtle */
+    z-index: -2; /* Behind canvas too */
+    pointer-events: none;
+    }
