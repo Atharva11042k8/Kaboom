@@ -3,11 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaboom.js Game</title>
-    <script src="https://unpkg.com/kaboom@3000.2.4/dist/kaboom.js"></script>
+    <title>Your Name - An Interactive 3D Portfolio Experience</title>
     <link rel="stylesheet" href="style.css">
-</head>
+    </head>
 <body>
-    <script src="script.js"></script>
+    <canvas id="bg"></canvas>
+
+    <div class="content-overlay">
+        <section id="hero-content" class="content-section active">
+            <h1>Your Name</h1>
+            <p>Creative Developer & Digital Artist</p>
+            <p class="scroll-prompt">Scroll Down To Explore</p>
+        </section>
+
+        <section id="about-content" class="content-section">
+            <h2>About Me</h2>
+            <p>Passionate about blending code and creativity to build unique digital experiences. Lover of [Your Passion 1] and [Your Passion 2].</p>
+            <p>Skills: JavaScript, Three.js, WebGL, Creative Coding, UI/UX</p>
+        </section>
+
+        <section id="projects-content" class="content-section">
+            <h2>Projects</h2>
+            <p>Interactive installations, generative art, mind-bending web experiments.</p>
+            <ul>
+                <li>Project Alpha</li>
+                <li>Project Beta</li>
+                <li>Project Gamma</li>
+            </ul>
+        </section>
+
+        <section id="contact-content" class="content-section">
+            <h2>Connect</h2>
+            <p>Let's create something amazing together.</p>
+            <a href="mailto:youremail@example.com">youremail@example.com</a>
+            <div class="social-links">
+                <a href="#">LinkedIn</a> | <a href="#">GitHub</a> | <a href="#">Twitter</a>
+            </div>
+        </section>
+    </div>
+
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Initializing Hyperdrive...</p>
+    </div>
+
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.163.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module" src="main.js"></script>
 </body>
 </html>
