@@ -8,9 +8,9 @@
 body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #ffffff;
-    /* Hide scrollbar but allow scrolling */
+    /* ENSURE scrolling is enabled */
     overflow-x: hidden;
-    overflow-y: scroll; /* Or 'auto' if you prefer */
+    overflow-y: scroll; /* Explicitly allow vertical scroll */
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
     background-color: #000000; /* Black background */
@@ -33,14 +33,15 @@ body::-webkit-scrollbar {
 
 /* Content Overlay Styling */
 .content-overlay {
-    position: relative; /* Needed for z-index stacking if required */
+    position: relative; /* Or fixed, depends on desired stacking context */
     z-index: 1; /* Ensure content is above canvas */
     width: 100%;
-    /* We control content visibility via JS, not direct scrolling */
+    /* This container itself doesn't need position: fixed */
+    /* pointer-events: none; /* Let events pass through to sections if needed */
 }
 
 .content-section {
-    min-height: 100vh; /* Each section conceptually takes viewport height */
+    min-height: 100vh; /* Conceptually takes viewport height */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -50,15 +51,19 @@ body::-webkit-scrollbar {
     max-width: 700px; /* Limit text width */
     margin: 0 auto; /* Center text block */
 
-    /* Fade-in/out control */
+    /* --- KEEP THESE --- */
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
     pointer-events: none; /* Initially not interactive */
     position: fixed; /* Keep sections fixed, fade in/out */
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%; /* Take full width for centering */
+    top: 0; /* Position fixed sections at the top */
+    left: 0; /* Use full width for centering logic below */
+    width: 100%; /* Take full width */
+    /* Center horizontally within the fixed container */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */ /* Handled by flex alignment now */
+    /* --- END KEEP --- */
+
 }
 
 .content-section.active {
@@ -66,7 +71,21 @@ body::-webkit-scrollbar {
     pointer-events: auto; /* Make active section interactive */
 }
 
-/* Specific Content Styling */
+/* Scroll Spacer Style */
+#scroll-spacer {
+    /* Needs height to create scrollable area */
+    height: 400vh; /* e.g., 100vh per section */
+    width: 1px; /* Takes no visual space horizontally */
+    position: absolute; /* Doesn't interfere with layout */
+    top: 0;
+    left: 0;
+    z-index: -5; /* Way behind everything */
+    pointer-events: none; /* Not interactive */
+    visibility: hidden; /* Completely invisible */
+}
+
+
+/* Specific Content Styling (NO CHANGES NEEDED HERE) */
 h1 {
     font-size: clamp(2.5rem, 8vw, 5rem); /* Responsive font size */
     font-weight: 700;
@@ -141,7 +160,7 @@ a:hover {
 }
 
 
-/* Loading Screen (Optional) */
+/* Loading Screen (NO CHANGES NEEDED HERE) */
 #loading-screen {
     position: fixed;
     top: 0;
@@ -183,7 +202,7 @@ a:hover {
 }
 
 
-/* Add subtle background noise/grain */
+/* Add subtle background noise/grain (NO CHANGES NEEDED HERE) */
 body::after {
     content: "";
     position: fixed;
@@ -191,8 +210,8 @@ body::after {
     left: 0;
     width: 100%;
     height: 100vh; /* Use vh to ensure full coverage */
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykGAjjKyAUhSZLldeKKTANrzAUROxPyGkgCHAmuGAJaCQZrZTjGCoGqsSqvQDfvkAea2rkKmQ6S+Xdk/pGilVBUwsWjpEzEeBFqumQsKgc/QqfMI Программисты любят كس أمك Вижн другога воде احد век قد رد хто făcut Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом ولهذا السبب هو إдак لحق مشكلة كبيرة казалось знову прийти тому що це дуже важливо Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом }eRP5clJQAzAsUCJZ9MA/Lf+xL4GGpW+X0OnKAUAUZUu1fJI+K4EEbA7DAC+1VKgE6P5LVDNJoAZCEv67hs+ApA4XAD/20ohTSTJ4D9xWQ/92zOfj+xkZCBlMAUh+hDtIuhTQTp377q9+I9Uu/vOE58HmDJIAoGgFCanBbGkgRFCKl8XJTIn01+3m5Z9Rd//jG3kMAAAAAASUVORK5CYII='); /* Subtle grain */
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykGAjjKyAUhSZLldeKKTANrzAUROxPyGkgCHAmuGAJaCQZrZTjGCoGqsSqvQDfvkAea2rkKmQ6S+Xdk/pGilVBUwsWjpEzEeBFqumQsKgc/QqfMIПрограммисты любят كس أمك Вижн другога воде احد век قد رد хто făcut Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом ولهذا السبب هو إдак لحق مشكلة كبيرة казалось знову прийти тому що це дуже важливо Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом Я думаю казино окупается таквим образом }eRP5clJQAzAsUCJZ9MA/Lf+xL4GGpW+X0OnKAUAUZUu1fJI+K4EEbA7DAC+1VKgE6P5LVDNJoAZCEv67hs+ApA4XAD/20ohTSTJ4D9xWQ/92zOfj+xkZCBlMAUh+hDtIuhTQTp377q9+I9Uu/vOE58HmDJIAoGgFCanBbGkgRFCKl8XJTIn01+3m5Z9Rd//jG3kMAAAAAASUVORK5CYII='); /* Subtle grain */
     opacity: 0.05; /* Very subtle */
     z-index: -2; /* Behind canvas too */
     pointer-events: none;
-    }
+}
